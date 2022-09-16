@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.test.mapper.LoginMapper">
+
+    <select id="queryByUserName" resultType="com.test.model.SysUser">
+        SELECT t.id, t.user_name, t.password, t.nick_name, t.salt, t.phone, t.email, t.status FROM SYS_USER t WHERE user_name = #{userName}
+    </select>
+
+    <select id="queryAllPerms" resultType="string">
+        SELECT
+            M.PERMS
+        FROM
+            sys_user_role_rel t
+            LEFT JOIN sys_role_menu_rel rm ON t.ROLE_ID = RM.ROLE_ID AND RM.DFLAG = 0
+            LEFT JOIN SYS_MENU M ON RM.MENU_ID = M.ID AND M.DFLAG = 0
+            LEFT JOIN sys_user u ON t.USER_ID = u.id AND u.DFLAG = 0
+        WHERE
+            t.DFLAG = 0
+            AND u.user_name = #{userName}
+    </select>
+</mapper>
